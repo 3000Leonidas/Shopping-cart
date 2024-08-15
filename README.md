@@ -1,5 +1,8 @@
 # Shopping-cart
-Carrito de Compra
+
+Carrito de Compra. En este repositorio encontrarás el código el usuario de React (jsx) y tailwind (Css). Para ver el codigo completo y su estructurado se debera clonar este repositorio (git clone), instalar sus dependecias (npm i), tailwind instalar (npm install tailwind) y ejecutar la aplciacion (npm run dev)
+
+!Muchas Gracias por ver nuestro trabajo #NuncaPares, #DesmostrandoProgresoCadaVezMas
 
 # React + Vite
 
