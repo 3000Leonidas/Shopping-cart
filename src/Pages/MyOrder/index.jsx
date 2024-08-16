@@ -20,7 +20,7 @@ function MyOrder() {
             </Link>
             <h1>My Order</h1>
           </div>
-          <div className='flex flex-col w-80'>
+          <div className='flex flex-col'>
             {
                 context.order?.[index]?.products.map(product => (
                     <OrderCard  
