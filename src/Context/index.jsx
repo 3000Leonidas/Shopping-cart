@@ -32,7 +32,9 @@ export const ShoppingCartProvider = ({children}) =>{
 
     //Get Products by Titles
     const [searchByTitle, setSearchByTitle] = useState(null)
-    console.log(searchByTitle)
+
+    //Get Products by Category
+    const [searchByCategory, setSearchByCategory] = useState(null)
 
     useEffect(() =>{
         fetch('https://api.escuelajs.co/api/v1/products')
@@ -45,11 +47,36 @@ export const ShoppingCartProvider = ({children}) =>{
         return items?.filter(item => item.title.toLowerCase().includes(searchByTitle.toLowerCase()))
     }
 
-    useEffect(()=>{ 
-        if(searchByTitle) setFilteredItems(filteredItemsByTitle(items, searchByTitle))
-    }, [items, searchByTitle])
+    const filteredItemsByCategory= (items, searchByCategory) =>{
+        return items?.filter(item => item.category.name.toLowerCase().includes(searchByCategory.toLowerCase()))
+    }
 
-    console.log('filter: ', filteredItemsByTitle)
+    const filterBy = (searchType, items, searchByTitle, searchByCategory) => {
+        if(searchType ==='BY_TITLE'){
+            return filteredItemsByTitle(items, searchByTitle)
+        }
+
+        if(searchType ==='BY_CATEGORY'){
+            return filteredItemsByCategory(items, searchByCategory)
+     
+        }
+        if(searchType ==='BY_TITLE_AND_CATEGORY'){
+            return filteredItemsByCategory(items, searchByCategory).filter(item => item.category.name.toLowerCase().includes(searchByCategory.toLowerCase()))
+            
+        }
+        if(!searchType){
+            return items
+         }
+
+    }
+
+    useEffect(()=>{ 
+        if(searchByTitle && searchByCategory) setFilteredItems(filterBy('BY_TITLE_AND_CATEGORY',items, searchByTitle,searchByCategory))
+        if(searchByTitle && !searchByCategory) setFilteredItems(filterBy('BY_TITLE',items, searchByTitle,searchByCategory))
+        if(!searchByTitle && searchByCategory) setFilteredItems(filterBy('BY_CATEGORY',items, searchByTitle,searchByCategory))
+        if(!searchByTitle && !searchByCategory) setFilteredItems(filterBy(null ,items, searchByTitle,searchByCategory))
+    }, [items, searchByTitle, searchByCategory])
+
 
     return( 
         <ShoppingCartContext.Provider value={
@@ -74,6 +101,8 @@ export const ShoppingCartProvider = ({children}) =>{
                 setSearchByTitle,
                 filteredItems,
                 setFilteredItems,
+                setSearchByCategory,
+                searchByCategory,
             }
         }>
             {children}
